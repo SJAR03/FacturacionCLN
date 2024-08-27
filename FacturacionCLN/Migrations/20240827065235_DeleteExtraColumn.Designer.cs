@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FacturacionCLN.Migrations
 {
     [DbContext(typeof(FacturacionDbContext))]
-    [Migration("20240826183413_BaseInicial")]
-    partial class BaseInicial
+    [Migration("20240827065235_DeleteExtraColumn")]
+    partial class DeleteExtraColumn
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -95,9 +95,6 @@ namespace FacturacionCLN.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ClienteId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime2");
 
@@ -113,7 +110,7 @@ namespace FacturacionCLN.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClienteId");
+                    b.HasIndex("IdCliente");
 
                     b.ToTable("Facturas");
                 });
@@ -190,7 +187,7 @@ namespace FacturacionCLN.Migrations
                 {
                     b.HasOne("FacturacionCLN.Models.Cliente", "Cliente")
                         .WithMany()
-                        .HasForeignKey("ClienteId")
+                        .HasForeignKey("IdCliente")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
