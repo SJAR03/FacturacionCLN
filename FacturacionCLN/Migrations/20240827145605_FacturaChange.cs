@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace FacturacionCLN.Migrations
 {
     /// <inheritdoc />
-    public partial class DeleteExtraColumn : Migration
+    public partial class FacturaChange : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -67,7 +67,12 @@ namespace FacturacionCLN.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Fecha = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IdCliente = table.Column<int>(type: "int", nullable: false),
-                    MontoTotal = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    SubTotalCordoba = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    IVACordoba = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    MontoTotalCordoba = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    SubTotalDolar = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    IVADolar = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    MontoTotalDolar = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Moneda = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -90,7 +95,10 @@ namespace FacturacionCLN.Migrations
                     IdFactura = table.Column<int>(type: "int", nullable: false),
                     IdProducto = table.Column<int>(type: "int", nullable: false),
                     Cantidad = table.Column<int>(type: "int", nullable: false),
-                    Precio = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    PrecioUnitarioCordoba = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    PrecioUnitarioDolar = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    SubtotalCordoba = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    SubtotalDolar = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {

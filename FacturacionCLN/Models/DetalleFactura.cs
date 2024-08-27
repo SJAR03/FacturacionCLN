@@ -10,10 +10,9 @@
 
         public int Cantidad { get; set; }
 
-        // Precios en Córdobas
-        public decimal TotalCordoba { get; set; }
-
-        // Precios en Dólares
-        public decimal TotalDolar { get; set; }
+        public decimal PrecioUnitarioCordoba { get; set; }
+        public decimal PrecioUnitarioDolar { get; set; }
+        public decimal SubtotalCordoba { get; set; }
+        public decimal SubtotalDolar { get; set; }
     }
 }

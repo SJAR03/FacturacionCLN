@@ -106,12 +106,6 @@ namespace FacturacionCLN.Controllers
                 return BadRequest();
             }
 
-            // Validar si el SKU ya existe
-            if (_prodService.SkuExiste(producto.SKU))
-            {
-                return BadRequest("El SKU ingresado ya existe. Por favor, elija un SKU diferente.");
-            }
-
             var tasaCambioHoy = await ObtenerTasaCambioDelDia();
             if (tasaCambioHoy == 0)
             {

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FacturacionCLN.Migrations
 {
     [DbContext(typeof(FacturacionDbContext))]
-    [Migration("20240827065235_DeleteExtraColumn")]
-    partial class DeleteExtraColumn
+    [Migration("20240827145605_FacturaChange")]
+    partial class FacturaChange
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -75,7 +75,16 @@ namespace FacturacionCLN.Migrations
                     b.Property<int>("IdProducto")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Precio")
+                    b.Property<decimal>("PrecioUnitarioCordoba")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PrecioUnitarioDolar")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("SubtotalCordoba")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("SubtotalDolar")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
@@ -98,6 +107,12 @@ namespace FacturacionCLN.Migrations
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime2");
 
+                    b.Property<decimal>("IVACordoba")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("IVADolar")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<int>("IdCliente")
                         .HasColumnType("int");
 
@@ -105,7 +120,16 @@ namespace FacturacionCLN.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("MontoTotal")
+                    b.Property<decimal>("MontoTotalCordoba")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("MontoTotalDolar")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("SubTotalCordoba")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("SubTotalDolar")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");

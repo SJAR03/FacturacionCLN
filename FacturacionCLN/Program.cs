@@ -16,6 +16,7 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectio
 
 builder.Services.AddTransient <ProductoService>();
 builder.Services.AddTransient<TasaCambioService>();
+builder.Services.AddTransient<FacturaService>();
 
 var app = builder.Build();
 
