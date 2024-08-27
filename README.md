@@ -24,3 +24,8 @@
 - Enter to Package Manager Console
 - Add-Migration InitialCreate
 - Update-database
+
+### Business rules
+
+- Only 2 decimals on prices and totals
+- Check price on products (cordobas and dollar conversion using of reference the cordobas price, if apply)
