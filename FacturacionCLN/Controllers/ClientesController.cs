@@ -44,21 +44,28 @@ namespace FacturacionCLN.Controllers
 
         // Get: api/Clientes/search?nombre={nombre}&codigo={codigo}
         [HttpGet("search")]
-        public async Task<ActionResult<IEnumerable<Cliente>>> SearchClientes(string nombre, string codigo)
+        public async Task<ActionResult<IEnumerable<Cliente>>> SearchClientes([FromQuery] string? nombre = null, [FromQuery] string? codigo = null)
         {
             var query = _context.Clientes.AsQueryable();
 
             if (!string.IsNullOrEmpty(nombre))
             {
-                query = query.Where(c => c.Nombre.Contains(nombre));
+                query = query.Where(c => EF.Functions.Like(c.Nombre, $"%{nombre}%"));
             }
 
             if (!string.IsNullOrEmpty(codigo))
             {
-                query = query.Where(c => c.Codigo.Contains(codigo));
+                query = query.Where(c => EF.Functions.Like(c.Codigo, $"%{codigo}%"));
             }
 
-            return await query.ToListAsync();
+            var clientes = await query.ToListAsync();
+
+            if (clientes == null || clientes.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return clientes;
         }
 
         // PUT: api/Clientes/{5}
