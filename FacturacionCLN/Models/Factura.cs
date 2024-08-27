@@ -17,8 +17,6 @@
         public decimal IVADolar { get; set; }
         public decimal MontoTotalDolar { get; set; }
 
-        public string Moneda { get; set; } // Moneda utilizada para la factura
-
         // Propiedad de navegación
         public ICollection<DetalleFactura> DetallesFactura { get; set; } = new List<DetalleFactura>();
     }
