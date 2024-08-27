@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using FacturacionCLN.Data;
 using FacturacionCLN.Models;
+using FacturacionCLN.Services.Interfaces;
 
 namespace FacturacionCLN.Controllers
 {
@@ -9,58 +10,43 @@ namespace FacturacionCLN.Controllers
     [ApiController]
     public class ClientesController : ControllerBase
     {
-        private readonly FacturacionDbContext _context;
+        private readonly IClienteService _clienteService;
 
-        public ClientesController(FacturacionDbContext context)
+        public ClientesController(IClienteService clienteService)
         {
-            _context = context;
+            _clienteService = clienteService;
         }
 
         // GET: api/Clientes
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Cliente>>> GetClientes()
         {
-            return await _context.Clientes.ToListAsync();
+            var clientes = await _clienteService.GetAllClientesAsync();
+            return Ok(clientes);
         }
 
         // GET: api/Clientes/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<Cliente>> GetCliente(int id)
         {
-            var cliente = await _context.Clientes.FindAsync(id);
-
+            var cliente = await _clienteService.GetClienteByIdAsync(id);
             if (cliente == null)
             {
                 return NotFound();
             }
-
-            return cliente;
+            return Ok(cliente);
         }
 
         // Get: api/Clientes/search?nombre={nombre}&codigo={codigo}
         [HttpGet("search")]
         public async Task<ActionResult<IEnumerable<Cliente>>> SearchClientes([FromQuery] string? nombre = null, [FromQuery] string? codigo = null)
         {
-            var query = _context.Clientes.AsQueryable();
-
-            if (!string.IsNullOrEmpty(nombre))
-            {
-                query = query.Where(c => EF.Functions.Like(c.Nombre, $"%{nombre}%"));
-            }
-
-            if (!string.IsNullOrEmpty(codigo))
-            {
-                query = query.Where(c => EF.Functions.Like(c.Codigo, $"%{codigo}%"));
-            }
-
-            var clientes = await query.ToListAsync();
-
-            if (clientes == null || clientes.Count == 0)
+            var clientes = await _clienteService.SearchClientesAsync(nombre, codigo);
+            if (clientes == null || !clientes.Any())
             {
                 return NotFound();
             }
-
-            return clientes;
+            return Ok(clientes);
         }
 
         // PUT: api/Clientes/{5}
@@ -72,24 +58,12 @@ namespace FacturacionCLN.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(cliente).State = EntityState.Modified;
-
-            try
+            if (!await _clienteService.ClienteExistsAsync(id))
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ClienteExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NotFound();
             }
 
+            await _clienteService.UpdateClienteAsync(cliente);
             return NoContent();
         }
 
@@ -97,9 +71,7 @@ namespace FacturacionCLN.Controllers
         [HttpPost]
         public async Task<ActionResult<Cliente>> PostCliente(Cliente cliente)
         {
-            _context.Clientes.Add(cliente);
-            await _context.SaveChangesAsync();
-
+            await _clienteService.AddClienteAsync(cliente);
             return CreatedAtAction("GetCliente", new { id = cliente.Id }, cliente);
         }
 
@@ -107,21 +79,14 @@ namespace FacturacionCLN.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCliente(int id)
         {
-            var cliente = await _context.Clientes.FindAsync(id);
-            if (cliente == null)
+            if (!await _clienteService.ClienteExistsAsync(id))
             {
                 return NotFound();
             }
 
-            _context.Clientes.Remove(cliente);
-            await _context.SaveChangesAsync();
-
+            await _clienteService.DeleteClienteAsync(id);
             return NoContent();
         }
 
-        private bool ClienteExists(int id)
-        {
-            return _context.Clientes.Any(e => e.Id == id);
-        }
     }
 }

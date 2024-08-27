@@ -26,7 +26,7 @@ namespace FacturacionCLN.Services
 
                 // Validación de tasa de cambio
                 var tasaCambio = _context.TasaCambios
-                                .Where(t => t.Fecha.Date == DateTime.Today)
+                                .Where(t => t.Fecha.Date == facturaDto.Fecha.Date)
                                 .Select(t => t.Tasa)
                                 .FirstOrDefault();
 

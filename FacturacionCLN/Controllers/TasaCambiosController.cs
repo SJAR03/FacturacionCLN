@@ -42,7 +42,7 @@ namespace FacturacionCLN.Controllers
                 return NotFound();
             }
 
-            return tasaCambio;
+            return Ok(tasaCambio);
         }
 
         // GET: api/TasasCambio/diaria
@@ -57,7 +57,7 @@ namespace FacturacionCLN.Controllers
                 return NotFound("No se ha registrado la tasa de cambio del dia");
             }
 
-            return tasaCambioHoy;
+            return Ok(tasaCambioHoy);
         }
 
         // GET: api/TasasCambio/mes/{year}/{month}
@@ -73,7 +73,7 @@ namespace FacturacionCLN.Controllers
                 return NotFound("No se ha registrado la tasa de cambio en ese mes");
             }
 
-            return tasaCambioMes;
+            return Ok(tasaCambioMes);
         }
 
 
