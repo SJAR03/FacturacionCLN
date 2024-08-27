@@ -1,4 +1,5 @@
 using FacturacionCLN.Data;
+using FacturacionCLN.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<FacturacionDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddTransient < ProductoService>();
 
 var app = builder.Build();
 

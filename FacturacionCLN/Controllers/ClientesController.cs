@@ -28,7 +28,7 @@ namespace FacturacionCLN.Controllers
             return await _context.Clientes.ToListAsync();
         }
 
-        // GET: api/Clientes/{5}
+        // GET: api/Clientes/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<Cliente>> GetCliente(int id)
         {
