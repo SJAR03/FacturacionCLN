@@ -14,7 +14,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<FacturacionDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddTransient < ProductoService>();
+builder.Services.AddTransient <ProductoService>();
+builder.Services.AddTransient<TasaCambioService>();
 
 var app = builder.Build();
 
