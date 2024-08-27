@@ -25,6 +25,11 @@ namespace FacturacionCLN.Data
                 .HasOne(d => d.Producto)
                 .WithMany()
                 .HasForeignKey(d => d.IdProducto);
+
+            modelBuilder.Entity<Factura>()
+                .HasOne(f => f.Cliente)
+                .WithMany()
+                .HasForeignKey(f => f.IdCliente);
         }
     }
 }

@@ -29,3 +29,13 @@
 
 - Only 2 decimals on prices and totals
 - Check price on products (cordobas and dollar conversion using of reference the cordobas price, if apply)
+
+- Cant accept negative exhange rate
+
+## Pending
+
+- Validate celphone numbers on client
+- Validate email on client
+- Validate repeat codes on client
+
+- In general, be more specific in the type of data for the database, check for nulls and column lengths

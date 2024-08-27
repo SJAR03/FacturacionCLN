@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace FacturacionCLN.Migrations
 {
     /// <inheritdoc />
-    public partial class BaseInicial : Migration
+    public partial class DeleteExtraColumn : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -67,7 +67,6 @@ namespace FacturacionCLN.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Fecha = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IdCliente = table.Column<int>(type: "int", nullable: false),
-                    ClienteId = table.Column<int>(type: "int", nullable: false),
                     MontoTotal = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Moneda = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
@@ -75,8 +74,8 @@ namespace FacturacionCLN.Migrations
                 {
                     table.PrimaryKey("PK_Facturas", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Facturas_Clientes_ClienteId",
-                        column: x => x.ClienteId,
+                        name: "FK_Facturas_Clientes_IdCliente",
+                        column: x => x.IdCliente,
                         principalTable: "Clientes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -121,9 +120,9 @@ namespace FacturacionCLN.Migrations
                 column: "IdProducto");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Facturas_ClienteId",
+                name: "IX_Facturas_IdCliente",
                 table: "Facturas",
-                column: "ClienteId");
+                column: "IdCliente");
         }
 
         /// <inheritdoc />
