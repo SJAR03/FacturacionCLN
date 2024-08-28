@@ -155,9 +155,117 @@ Para agregar varios productos, solamente se añaden nuevos elementos de producto
 ```
 
 *El calculo de los montos totales e IVA tanto en cordobas como en dolar, se calculan en base a la cantidad de productos y el precio unitario que el producto tiene registrado en la base de datos en ese momento.*
-- a
 
+- **DELETE** /api/Facturas/{id}: Permite eliminar la factura junto a los detalles por id de factura
 
+## Reportes
+
+- **GET** /api/Reportes/ventas-mensuales:
+
+*Permite obtener y visualizar las ventas totales por mes, segmentado por cada cliente de manera individual.*
+
+*Cabe recalcar que, si el mismo cliente facturo el mismo producto más de 1 vez en el mes, los productos se agrupan, es decir, si el cliente compro el producto A por una cantidad de 2, el 8 de agosto, y luego compro el mismo producto A, por una cantidad de 3, pero el día 9 de agosto, en el reporte el producto aparecera agrupado, es decir, un solo segmento de ese producto por una cantidad de 5, en vez de detallar 2 veces el mismo producto, primero por cantidad 2 y luego por 3. Esto permite facilitar la visualizacion de las compras totales del cliente*
+
+Por ejemplo, en este reporte, devuelve las ventas totales y los detalles de los productos facturados por los cliente:
+```json
+[
+  {
+    "codigoCliente": 1,
+    "nombreCliente": "Sergi",
+    "anio": 2024,
+    "mes": 8,
+    "totalDolares": 73.53,
+    "totalCordobas": 2685.75,
+    "productos": [
+      {
+        "nombreProducto": "Flor de caña",
+        "sku": "500",
+        "cantidadTotal": 3,
+        "precioUnitarioCordoba": 895.25,
+        "precioUnitarioDolar": 24.51
+      }
+    ]
+  },
+  {
+    "codigoCliente": 3,
+    "nombreCliente": "Javi",
+    "anio": 2024,
+    "mes": 8,
+    "totalDolares": 24.51,
+    "totalCordobas": 895.25,
+    "productos": [
+      {
+        "nombreProducto": "Flor de caña",
+        "sku": "500",
+        "cantidadTotal": 1,
+        "precioUnitarioCordoba": 895.25,
+        "precioUnitarioDolar": 24.51
+      }
+    ]
+  },
+  {
+    "codigoCliente": 4,
+    "nombreCliente": "Pedro",
+    "anio": 2024,
+    "mes": 8,
+    "totalDolares": 453.27,
+    "totalCordobas": 16553.38,
+    "productos": [
+      {
+        "nombreProducto": "Ron",
+        "sku": "651",
+        "cantidadTotal": 10,
+        "precioUnitarioCordoba": 1445.23,
+        "precioUnitarioDolar": 39.57
+      },
+      {
+        "nombreProducto": "Flor de caña",
+        "sku": "500",
+        "cantidadTotal": 3,
+        "precioUnitarioCordoba": 700.36,
+        "precioUnitarioDolar": 19.19
+      }
+    ]
+  }
+]
+```
+
+**Ademas, el endpoint permite filtrar por los siguiente parametros:**
+
+1) codigo del cliente
+2) nombre del cliente
+3) año
+4) mes
+5) producto (descripcion)
+6) sku
+
+En la siguiente consulta por ejemplo, se filtra por lo siguiente:
+https://localhost:7293/api/Reportes/ventas-mensuales?codigoCliente=131&nombreCliente=javi&anio=2024&mes=8&producto=flor&sku=500
+
+*Devolviendo lo siguiente:*
+
+```json
+[
+  {
+    "codigoCliente": 3,
+    "nombreCliente": "Javi",
+    "anio": 2024,
+    "mes": 8,
+    "totalDolares": 24.51,
+    "totalCordobas": 895.25,
+    "productos": [
+      {
+        "nombreProducto": "Flor de caña",
+        "sku": "500",
+        "cantidadTotal": 1,
+        "precioUnitarioCordoba": 895.25,
+        "precioUnitarioDolar": 24.51
+      }
+    ]
+  }
+]
+```
+-------------------------------------
 
 ## Comentario finales
 El API proporcionada por mi persona cumple con todos los requisitos solicitados según mi propio criterio y abstración del problema a resolver.
