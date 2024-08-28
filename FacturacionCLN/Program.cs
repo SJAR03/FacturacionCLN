@@ -1,6 +1,9 @@
 using FacturacionCLN.Data;
+using FacturacionCLN.Repositories.Interfaces;
+using FacturacionCLN.Repositories;
 using FacturacionCLN.Services;
 using Microsoft.EntityFrameworkCore;
+using FacturacionCLN.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +17,10 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<FacturacionDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddTransient <ProductoService>();
+// Registro de servicios
+builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
+builder.Services.AddScoped<IClienteService, ClienteService>();
+builder.Services.AddTransient<ProductoService>();
 builder.Services.AddTransient<TasaCambioService>();
 builder.Services.AddTransient<FacturaService>();
 builder.Services.AddTransient<ReporteVentasService>();
