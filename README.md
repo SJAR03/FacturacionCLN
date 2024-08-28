@@ -34,8 +34,4 @@
 
 ## Pending
 
-- Validate celphone numbers on client
-- Validate email on client
-- Validate repeat codes on client
-
 - In general, be more specific in the type of data for the database, check for nulls and column lengths
