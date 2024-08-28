@@ -4,6 +4,7 @@ using FacturacionCLN.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FacturacionCLN.Migrations
 {
     [DbContext(typeof(FacturacionDbContext))]
-    partial class FacturacionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240827145605_FacturaChange")]
+    partial class FacturaChange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,31 +35,23 @@ namespace FacturacionCLN.Migrations
 
                     b.Property<string>("Codigo")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("varchar(10)");
-
-                    b.Property<string>("CodigoPais")
-                        .IsRequired()
-                        .HasMaxLength(3)
-                        .HasColumnType("varchar(3)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Direccion")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Telefono")
                         .IsRequired()
-                        .HasColumnType("varchar(8)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -121,6 +116,10 @@ namespace FacturacionCLN.Migrations
                     b.Property<int>("IdCliente")
                         .HasColumnType("int");
 
+                    b.Property<string>("Moneda")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<decimal>("MontoTotalCordoba")
                         .HasColumnType("decimal(18,2)");
 
@@ -153,8 +152,7 @@ namespace FacturacionCLN.Migrations
 
                     b.Property<string>("Descripcion")
                         .IsRequired()
-                        .HasMaxLength(70)
-                        .HasColumnType("varchar(70)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("PrecioCordoba")
                         .HasColumnType("decimal(18,2)");
@@ -164,8 +162,7 @@ namespace FacturacionCLN.Migrations
 
                     b.Property<string>("SKU")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("varchar(10)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -181,10 +178,10 @@ namespace FacturacionCLN.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Fecha")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime2");
 
                     b.Property<decimal>("Tasa")
-                        .HasColumnType("decimal(18,6)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 

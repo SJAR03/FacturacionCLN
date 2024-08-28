@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using FacturacionCLN.Data;
 using FacturacionCLN.Models;
 using FacturacionCLN.Services;
+using FacturacionCLN.Services.Interfaces;
 
 namespace FacturacionCLN.Controllers
 {
@@ -15,12 +16,10 @@ namespace FacturacionCLN.Controllers
     [ApiController]
     public class TasaCambiosController : ControllerBase
     {
-        private readonly FacturacionDbContext _context;
-        private readonly TasaCambioService _tasaCambioService;
+        private readonly ITasaCambioService _tasaCambioService;
 
-        public TasaCambiosController(FacturacionDbContext context, TasaCambioService tasaCambioService)
+        public TasaCambiosController(ITasaCambioService tasaCambioService)
         {
-            _context = context;
             _tasaCambioService = tasaCambioService;
         }
 
@@ -28,52 +27,44 @@ namespace FacturacionCLN.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TasaCambio>>> GetTasaCambios()
         {
-            return await _context.TasaCambios.ToListAsync();
+            var tasas = await _tasaCambioService.GetAllTasaCambioAsync();
+            return Ok(tasas);
         }
 
         // GET: api/TasaCambios/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<TasaCambio>> GetTasaCambio(int id)
         {
-            var tasaCambio = await _context.TasaCambios.FindAsync(id);
-
+            var tasaCambio = await _tasaCambioService.GetTasaCambioByIdAsync(id);
             if (tasaCambio == null)
             {
                 return NotFound();
             }
-
-            return tasaCambio;
+            return Ok(tasaCambio);
         }
 
         // GET: api/TasasCambio/diaria
         [HttpGet("diaria")]
         public async Task<ActionResult<TasaCambio>> GetTasaCambioDiaria()
         {
-            var hoy = DateTime.Today;
-            var tasaCambioHoy = await _context.TasaCambios.FirstOrDefaultAsync(tc => tc.Fecha.Date == hoy);
-
-            if (tasaCambioHoy == null)
+            var tasaCambio = await _tasaCambioService.GetTasaCambioOfTheDayAsync();
+            if (tasaCambio == null)
             {
-                return NotFound("No se ha registrado la tasa de cambio del dia");
+                return NotFound("No se ha registrado la tasa de cambio del día.");
             }
-
-            return tasaCambioHoy;
+            return Ok(tasaCambio);
         }
 
         // GET: api/TasasCambio/mes/{year}/{month}
         [HttpGet("mes/{year}/{month}")]
         public async Task<ActionResult<IEnumerable<TasaCambio>>> GetTasaCambioPorMes(int year, int month)
         {
-            var tasaCambioMes = await _context.TasaCambios
-                .Where(tc => tc.Fecha.Year == year && tc.Fecha.Month == month)
-                .ToListAsync();
-
-            if (!tasaCambioMes.Any())
+            var tasas = await _tasaCambioService.GetTasaCambioByMonthAsync(year, month);
+            if (tasas == null || !tasas.Any())
             {
-                return NotFound("No se ha registrado la tasa de cambio en ese mes");
+                return NotFound("No se ha registrado la tasa de cambio en ese mes.");
             }
-
-            return tasaCambioMes;
+            return Ok(tasas);
         }
 
 
@@ -87,30 +78,13 @@ namespace FacturacionCLN.Controllers
                 return BadRequest();
             }
 
-            // Validación de la tasa de cambio
-            var (tasaEsValida, mensajeErrorTasa) = _tasaCambioService.ValidarTasaCambio(tasaCambio.Tasa);
-
-            if (!tasaEsValida)
-            {
-                return BadRequest(mensajeErrorTasa);
-            }
-
-            _context.Entry(tasaCambio).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                await _tasaCambioService.UpdateTasaCambioAsync(tasaCambio);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (ArgumentException ex)
             {
-                if (!TasaCambioExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return BadRequest(ex.Message);
             }
 
             return NoContent();
@@ -120,48 +94,25 @@ namespace FacturacionCLN.Controllers
         [HttpPost]
         public async Task<ActionResult<TasaCambio>> PostTasaCambio(TasaCambio tasaCambio)
         {
-            // Validación de la tasa de cambio
-            var (tasaEsValida, mensajeErrorTasa) = _tasaCambioService.ValidarTasaCambio(tasaCambio.Tasa);
-
-            if (!tasaEsValida)
+            try
             {
-                return BadRequest(mensajeErrorTasa);
+                await _tasaCambioService.AddTasaCambioAsync(tasaCambio);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
             }
 
-            _context.TasaCambios.Add(tasaCambio);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetTasaCambio", new { id = tasaCambio.Id }, tasaCambio);
+            return CreatedAtAction(nameof(GetTasaCambio), new { id = tasaCambio.Id }, tasaCambio);
         }
 
         // DELETE: api/TasaCambios/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTasaCambio(int id)
         {
-            var tasaCambio = await _context.TasaCambios.FindAsync(id);
-            if (tasaCambio == null)
-            {
-                return NotFound();
-            }
-
-            _context.TasaCambios.Remove(tasaCambio);
-            await _context.SaveChangesAsync();
-
+            await _tasaCambioService.DeleteTasaCambioAsync(id);
             return NoContent();
         }
 
-        // Obtener la tasa de cambio del dia
-        private async Task<decimal> ObtenerTasaCambioDelDia()
-        {
-            return await _context.TasaCambios
-                .Where(tc => tc.Fecha == DateTime.Today)
-                .Select(tc => tc.Tasa)
-                .FirstOrDefaultAsync();
-        }
-
-        private bool TasaCambioExists(int id)
-        {
-            return _context.TasaCambios.Any(e => e.Id == id);
-        }
     }
 }

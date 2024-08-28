@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FacturacionCLN.Data;
 using FacturacionCLN.Models;
+using FacturacionCLN.Services;
+using FacturacionCLN.DTO;
 
 namespace FacturacionCLN.Controllers
 {
@@ -14,99 +16,56 @@ namespace FacturacionCLN.Controllers
     [ApiController]
     public class FacturasController : ControllerBase
     {
-        private readonly FacturacionDbContext _context;
 
-        public FacturasController(FacturacionDbContext context)
+        private readonly FacturaService _facturaService;
+
+        public FacturasController(FacturaService facturaService)
         {
-            _context = context;
+            _facturaService = facturaService;
         }
 
-        // GET: api/Facturas
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Factura>>> GetFacturas()
+        // Crear factura
+        [HttpPost]
+        public IActionResult CrearFactura([FromBody]FacturaDTO facturaDTO)
         {
-            return await _context.Facturas.
-                Include(f => f.Cliente)
-                .Include(f => f.DetallesFactura)
-                .ThenInclude(d => d.Producto)
-                .ToListAsync();
-        }
-
-        // GET: api/Facturas/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Factura>> GetFactura(int id)
-        {
-            var factura = await _context.Facturas.FindAsync(id);
-
-            if (factura == null)
-            {
-                return NotFound();
-            }
-
-            return factura;
-        }
-
-        // PUT: api/Facturas/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutFactura(int id, Factura factura)
-        {
-            if (id != factura.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(factura).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                var factura = _facturaService.CrearFactura(facturaDTO);
+                return Ok(factura);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                if (!FacturaExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return BadRequest(new { mensaje = ex.Message });
             }
-
-            return NoContent();
         }
 
-        // POST: api/Facturas
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Factura>> PostFactura(Factura factura)
+        // Listar facturas
+        [HttpGet]
+        public IActionResult ListarFacturas()
         {
-            _context.Facturas.Add(factura);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetFactura", new { id = factura.Id }, factura);
+            var facturas = _facturaService.ListarFacturas();
+            return Ok(facturas);
         }
 
-        // DELETE: api/Facturas/5
+        // Obtener factura por id o cliente
+        [HttpGet("buscar/{criterio}")]
+        public IActionResult ObtenerFacturaPorIdOCliente(string criterio)
+        {
+            var factura = _facturaService.ObtenerFacturaPorIdOCliente(criterio);
+            if (factura.Any())
+                return Ok(factura);
+            return NotFound("No se encontraron facturas con el criterio proporcionado.");
+        }
+
+        // Eliminar factura
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteFactura(int id)
+        public IActionResult EliminarFactura(int id)
         {
-            var factura = await _context.Facturas.FindAsync(id);
-            if (factura == null)
-            {
-                return NotFound();
-            }
-
-            _context.Facturas.Remove(factura);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            var result = _facturaService.EliminarFactura(id);
+            if (result)
+                return Ok("Factura eliminada exitosamente");
+            return BadRequest("No se pudo eliminar la factura");
         }
 
-        private bool FacturaExists(int id)
-        {
-            return _context.Facturas.Any(e => e.Id == id);
-        }
     }
 }
