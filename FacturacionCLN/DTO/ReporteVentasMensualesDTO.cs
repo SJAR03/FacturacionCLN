@@ -15,6 +15,9 @@
     {
         public string NombreProducto { get; set; }
         public string SKU { get; set; }
+        public int CantidadTotal { get; set; }
+        public decimal PrecioUnitarioCordoba { get; set; }
+        public decimal PrecioUnitarioDolar { get; set; }
     }
 
 }

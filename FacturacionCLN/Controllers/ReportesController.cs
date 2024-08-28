@@ -16,7 +16,13 @@ namespace FacturacionCLN.Controllers
         }
 
         [HttpGet("ventas-mensuales")]
-        public IActionResult ObtenerReporteVentasMensuales([FromQuery] int? codigoCliente = null, [FromQuery] string nombreCliente = null, [FromQuery] int? anio = null, [FromQuery] int? mes = null, [FromQuery] string producto = null, [FromQuery] string sku = null)
+        public IActionResult ObtenerReporteVentasMensuales(
+            [FromQuery] int? codigoCliente = null,
+            [FromQuery] string nombreCliente = null,
+            [FromQuery] int? anio = null,
+            [FromQuery] int? mes = null,
+            [FromQuery] string producto = null,
+            [FromQuery] string sku = null)        
         {
             var reporte = _reporteVentasService.GenerarReporteVentasMensuales(codigoCliente, nombreCliente, anio, mes, producto, sku);
             if (reporte.Any())
