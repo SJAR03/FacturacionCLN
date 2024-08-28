@@ -72,4 +72,3 @@ Ejecuta el proyecto en modo desarrollo:
 
 - Asegurarse de tener SQL Server en tu entorno de desarrollo o configurar la cadena de conexión adecuadamente en `appsettings.json`. (Solo cambiar el servidor al que apunta, el usuario y contraseña) Las pruebas hechas para probar esta API fueron hechas en un servidor local
 - La base de datos se inicializa con una migración inicial, asegurarse de ejecutar el comando de migración después de clonar el repositorio.
-- **DTOs**: Los Objetos de Transferencia de Datos (DTOs) se utilizan para estructurar los datos intercambiados entre el cliente y el servidor, asegurando una separación clara entre los modelos de base de datos y los datos expuestos a través de la API.
