@@ -20,8 +20,9 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectio
 // Registro de servicios
 builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
 builder.Services.AddScoped<IClienteService, ClienteService>();
+builder.Services.AddScoped<ITasaCambioRepository, TasaCambioRepository>();
+builder.Services.AddScoped<ITasaCambioService, TasaCambioService>();
 builder.Services.AddTransient<ProductoService>();
-builder.Services.AddTransient<TasaCambioService>();
 builder.Services.AddTransient<FacturaService>();
 builder.Services.AddTransient<ReporteVentasService>();
 
