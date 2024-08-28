@@ -159,4 +159,15 @@ Para agregar varios productos, solamente se añaden nuevos elementos de producto
 
 
 
+## Comentario finales
+El API proporcionada por mi persona cumple con todos los requisitos solicitados según mi propio criterio y abstración del problema a resolver.
 
+Sin embargo, por cuestiones de tiempo, no logré finalizar el codigo completo a como a mi me gustaría, aplicando una estructura más ordenada y siguiendo las mejores prácticas (por ejemplo, el CRUD de clientes y tasa de cambio si me dio tiempo a refactorizar, pero en cambio factura, el componente más pesado, no tuve tiempo de hacerlo, pero aun con todo y eso, el componente cumple con las funcionalidades requeridas).
+
+La base de datos se crea directamente usando update-database y aplicando las migraciones de entity framework desde la consola de administrador de paquetes, como lo muestro en el README.md. Recordar cambiar la conexion a la base de datos en el appsettings.json. Igualmente, proporciono un archivo llamadp schemaCLN.sql para crear el esquema de la base de datos directamente.
+
+Ademas, recordar que es necesario instalar los paquetes de entity framework detallados en el README.md
+
+Asimismo, facilitare en el repositorio, un pequeño archivo llamado dataCLN.sql, que inserta unos cuantos registros de meramente prueba para la base de datos, se debe ejecutar despues de realizar el update-database o de haber creado la base de datos directamente.
+
+Utilice ASP NET CORE con la versión 8 ed .NET, por lo cual necesitaran el SDK, en caso de no tenerlo ya instalado, deben descargarlo e instalar para poder levantar el proyecto.
