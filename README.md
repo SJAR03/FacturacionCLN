@@ -40,7 +40,7 @@ Para configurar entity framework core, sigue estos pasos en la Consola del admin
 - Tasa de Cambio: No se aceptan tasas de cambio negativas.
 
 ## Reglas API
-- Para obtener la factura por cliente o ID factura, se usa el endpoint de GET/api/Facturas/buscar/{criterio}, donde criterio puede ser el ID Cliente o ID Factura.
+- Detallado en el archivo de Detalles.md (https://github.com/SJAR03/FacturacionCLN/blob/master/Detalles.md)
 
 ## Cómo Levantar el Proyecto
 
