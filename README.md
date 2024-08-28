@@ -4,6 +4,10 @@
 
 Este proyecto es una API RESTful construida con ASP.NET Core para la gestión de facturación. Utiliza .NET 8.0 y está diseñado para funcionar con Microsoft SQL Server.
 
+## Importante
+
+Favor, también leer el otro archivo llamado Detalles.md (https://github.com/SJAR03/FacturacionCLN/blob/master/Detalles.md)
+
 ## Requisitos
 
 - **ASP.NET Core Web API**
